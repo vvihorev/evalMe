@@ -1,0 +1,13 @@
+<h1>Vote links and results</h1>
+% if len(vote_links) > 0:
+  <p>Please pick your vote link:</p>
+  % for user in vote_links:
+    <p><a href="/eval/vote/{{vote_links[user]}}">I am {{user}}!</a></p>
+  % end
+% else:
+  <h1>Evaluation results</h1>
+  % for user in users:
+    <p>{{user}}: <b>{{users[user]}}</b></p>
+  % end
+% end
+

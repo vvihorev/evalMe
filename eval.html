@@ -1,0 +1,10 @@
+<h1>Anonymous evaluation page</h1>
+<p>Distribute a 100 points in total among the team members</p>
+<p><b>{{msg}}</b></p>
+<form action="/eval/eval" method="POST">
+    % for user in users:
+    <p>{{user}} <input name="{{user}}" value=10 /></p>
+    % end
+    <input value="Submit" type="submit" />
+    <input name="vote_link" value="{{vote_link}}" type="hidden" />
+</form>
