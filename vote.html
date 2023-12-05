@@ -1,7 +1,7 @@
 <h1>Anonymous evaluation page</h1>
 <p>Distribute {{points}} points in total among the team members</p>
 <p style="color:red;"><b>{{msg}}</b></p>
-<form oninput="getSum()" action="/eval/eval" method="POST">
+<form oninput="getSum()" action="/vote" method="POST">
     % for user in users:
     <p>{{user}} <input name="{{user}}" type="number" value={{int(points / len(users))}} /></p>
     % end

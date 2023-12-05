@@ -26,7 +26,7 @@ def vote(vote_link):
     if vote_link not in vote_links.values():
         return "Vote link with this id does not exist"
     return template(
-        "eval",
+        "vote",
         users={u: users[u] for u in users if u != this_user},
         vote_link=vote_link,
         msg="",
@@ -34,8 +34,8 @@ def vote(vote_link):
     )
 
 
-@route("/eval", method="POST")
-def eval():
+@route("/vote", method="POST")
+def submit_vote():
     vote_link = int(request.forms.get("vote_link"))
     this_user = None
     for user in vote_links:
@@ -52,7 +52,7 @@ def eval():
             int(request.forms.get(user))
         except ValueError:
             return template(
-                "eval",
+                "vote",
                 users={u: users[u] for u in users if u != this_user},
                 vote_link=vote_link,
                 msg="All values must be integers",
@@ -60,7 +60,7 @@ def eval():
             )
         if int(request.forms.get(user)) < 0:
             return template(
-                "eval",
+                "vote",
                 users={u: users[u] for u in users if u != this_user},
                 vote_link=vote_link,
                 msg="All points must be positive",
@@ -69,7 +69,7 @@ def eval():
         sum += int(request.forms.get(user))
     if sum != points:
         return template(
-            "eval",
+            "vote",
             users={u: users[u] for u in users if u != this_user},
             vote_link=vote_link,
             msg=f"Points must add up to {points}, vote again please",
@@ -81,7 +81,7 @@ def eval():
         if user == this_user:
             continue
         users[user] += int(request.forms.get(user))
-    redirect("/eval")
+    redirect("/", 302)
 
 
 run(host="localhost", port=8069)
