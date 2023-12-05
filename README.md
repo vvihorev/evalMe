@@ -1,7 +1,8 @@
-# Eval
+# evalMe
 
-Main page: template with nine lines - user and link to his anonymous eval (random number)
-Eval page: nine lines with names - distribute 100 points between them (url to eval must be one of active eval)
-Summmary page: nine lines with sum of evaluations, opens only when all nine evals have been submitted
+- Every team member gets a **random link to his evaluation form**
+- Distribute a set number of points among all team members except for yourself
+- The **evaluation can be submitted only once**
+- **Only when all evaluations are submitted** the results page becomes available
+- Restart the server to reset the evaluation
 
-eval - nine unique urls to eval pages and summary page (summary page unlocked only when all evals have been submitted)
