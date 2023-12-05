@@ -1,6 +1,6 @@
 # evalMe
 
-![dsd-eval-demo-2](https://github.com/vvihorev/evalMe/assets/33204359/d1a19e92-e360-4464-adb0-cdd6adb2f0fb)
+![evalMe](https://github.com/vvihorev/evalMe/assets/33204359/1fbd6197-26f2-4065-bf38-a58c586cef34)
 
 - Every team member gets a **random link to their evaluation form**
 - Distribute a set number of points among all team members except for yourself
