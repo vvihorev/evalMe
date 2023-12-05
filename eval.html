@@ -1,10 +1,37 @@
 <h1>Anonymous evaluation page</h1>
-<p>Distribute a 100 points in total among the team members</p>
-<p><b>{{msg}}</b></p>
-<form action="/eval/eval" method="POST">
+<p>Distribute {{points}} points in total among the team members</p>
+<p style="color:red;"><b>{{msg}}</b></p>
+<form oninput="getSum()" action="/eval/eval" method="POST">
     % for user in users:
-    <p>{{user}} <input name="{{user}}" value=10 /></p>
+    <p>{{user}} <input name="{{user}}" type="number" value={{int(points / len(users))}} /></p>
     % end
     <input value="Submit" type="submit" />
     <input name="vote_link" value="{{vote_link}}" type="hidden" />
 </form>
+<script>
+    function getSum() {
+        const forms = document.querySelectorAll('form');
+        const form = forms[0];
+
+        let sum = 0;
+        Array.from(form.elements).forEach((input) => {
+          if (input.type != "number") return;
+            sum += parseInt(input.value);
+        });
+        let sumElem = document.getElementById("sum");
+        sumElem.innerHTML = sum;
+        if (sum > {{points}}) {
+            sumElem.style.color = "red";
+        } else if (sum < {{points}}) {
+            sumElem.style.color = "orange";
+        } else {
+            sumElem.style.color = "green";
+        }
+    }
+
+    window.onload = function() {
+      getSum();
+    };
+</script>
+<p>Sum of points:</p>
+<h1 id="sum">0</h1>
