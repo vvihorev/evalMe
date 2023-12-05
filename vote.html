@@ -1,73 +1,76 @@
-<h1>Anonymous evaluation page</h1>
-<p>Distribute {{points}} points in total among the team members</p>
-<p style="color:red;"><b>{{msg}}</b></p>
-<form oninput="getSum()" action="{{base_dir}}/vote" method="POST">
-    <table>
-        <tr>
-            <th>Team member</th>
-            % for crit in criteria:
-            <th>{{crit}}</th>
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+</head>
+<body>
+    <div class="is-center">
+        <div class="col-8">
+            <h1>Anonymous evaluation page</h1>
+            <p>Distribute {{points}} points in total among the team members</p>
+            % if msg:
+            <blockquote style="color:red;"><b>{{msg}}</b></blockquote>
             % end
-            <th></th>
-        </tr>
-        % for user in users:
-        <tr>
-            <td>{{user}}</td>
-            % for crit in criteria:
-            <td><input name="{{user}}-{{crit}}" class="{{crit}}" type="number" value={{int(points / len(users))}} /></td>
-            % end
-        </tr>
-        % end
-    </table>
-    <input value="Submit" type="submit" />
-    <input name="vote_link" value="{{vote_link}}" type="hidden" />
-</form>
-<script>
-    function getSum() {
-        let critElems = Array.from(document.getElementsByClassName("crit"));
-        const criteria = critElems.map((e) => e.innerHTML);
+            <form oninput="getSum()" action="{{base_dir}}/vote" method="POST">
+                <table class="striped">
+                    <thead>
+                        <th>Team member</th>
+                        % for crit in criteria:
+                        <th class="crit">{{crit}}</th>
+                        % end
+                        <th></th>
+                    </thead>
+                    <tbody>
+                        % for user in users:
+                        <tr>
+                            <td>{{user}}</td>
+                            % for crit in criteria:
+                            <td><input name="{{user}}-{{crit}}" class="{{crit}}" type="number" value={{int(points / len(users))}} /></td>
+                            % end
+                        </tr>
+                        % end
+                    </tbody>
+                    <tfoot>
+                        <td><h2>Sum of points</h2></td>
+                        % for crit in criteria:
+                        <td><h1 id="{{crit}}">0</h1></td>
+                        % end
+                    </tfoot>
+                </table>
+                <input class="is-center" value="Submit" type="submit" />
+                <input name="vote_link" value="{{vote_link}}" type="hidden" />
+            </form>
+            <script>
+                function getSum() {
+                    let critElems = Array.from(document.getElementsByClassName("crit"));
+                    const criteria = critElems.map((e) => e.innerHTML);
 
-        const forms = document.querySelectorAll('form');
-        const form = forms[0];
+                    const forms = document.querySelectorAll('form');
+                    const form = forms[0];
 
-        let sums = {};
-        for (const crit of criteria) { sums[crit] = 0; }
+                    let sums = {};
+                    for (const crit of criteria) { sums[crit] = 0; }
 
-        Array.from(form.elements).forEach((input) => {
-          if (input.type != "number") return;
-            sums[input.className] += parseInt(input.value);
-        });
+                    Array.from(form.elements).forEach((input) => {
+                      if (input.type != "number") return;
+                        sums[input.className] += parseInt(input.value);
+                    });
 
-        for (const crit of criteria) {
-            let sumElem = document.getElementById(crit);
-            sumElem.innerHTML = sums[crit];
-            if (sums[crit] > {{points}}) {
-                sumElem.style.color = "red";
-            } else if (sums[crit] < {{points}}) {
-                sumElem.style.color = "orange";
-            } else {
-                sumElem.style.color = "green";
-            }
-        }
-    }
+                    for (const crit of criteria) {
+                        let sumElem = document.getElementById(crit);
+                        sumElem.innerHTML = sums[crit];
+                        if (sums[crit] > {{points}}) {
+                            sumElem.style.color = "red";
+                        } else if (sums[crit] < {{points}}) {
+                            sumElem.style.color = "orange";
+                        } else {
+                            sumElem.style.color = "green";
+                        }
+                    }
+                }
 
-    window.onload = function() {
-      getSum();
-    };
-</script>
-
-<p>Sum of points:</p>
-<table>
-    <tr>
-        % for crit in criteria:
-        <th class="crit">{{crit}}</th>
-        % end
-    </tr>
-    <tr>
-        % for crit in criteria:
-        <td><h1 id="{{crit}}">0</h1></td>
-        % end
-    </tr>
-
-</table>
-
+                window.onload = function() {
+                  getSum();
+                };
+            </script>
+        </div>
+    </div>
+</body>

@@ -1,27 +1,35 @@
-% if len(vote_links) > 0:
-  <h1>Vote links and results</h1>
-  <p>Please pick your vote link:</p>
-  % for user in vote_links:
-    <p><a href="vote/{{vote_links[user]}}">I am {{user}}!</a></p>
-  % end
-% else:
-  <h1>Evaluation results</h1>
-  <table>
-      <tr>
-          <th>Team member</th>
-          % for crit in criteria:
-          <th>{{crit}}</th>
-          % end
-          <th></th>
-      </tr>
-      % for user in users:
-      <tr>
-          <td>{{user}}</td>
-          % for crit in criteria:
-          <td>{{users[user][crit]}}</td>
-          % end
-      </tr>
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/chota@latest">
+</head>
+<body>
+  <div class="is-center">
+    <div class="col-6">
+      % if len(vote_links) > 0:
+        <h1>Vote links and results</h1>
+        <p>Please pick your vote link:</p>
+        % for user in vote_links:
+          <p><a href="vote/{{vote_links[user]}}">I am {{user}}!</a></p>
+        % end
+      % else:
+        <h1>Evaluation results</h1>
+        <table class="striped">
+            <thead>
+                <th>Team member</th>
+                % for crit in criteria:
+                <th>{{crit}}</th>
+                % end
+                <th></th>
+            </thead>
+            % for user in users:
+            <tbody>
+                <td>{{user}}</td>
+                % for crit in criteria:
+                <td>{{users[user][crit]}}</td>
+                % end
+            </tbody>
+            % end
+        </table>
       % end
-  </table>
-% end
-
+    </div>
+  </div>
+</body>

@@ -7,7 +7,9 @@
     "criteria": [
         "first", 
         "second",
-        "third"
+        "third",
+        "fourth",
+        "fifth"
     ],
     "points": 20,
     "base_dir": ""
