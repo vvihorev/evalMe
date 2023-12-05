@@ -9,13 +9,18 @@ with open("config.json") as f:
 
 base_dir = config["base_dir"]
 points = config["points"]
-users = {user: 0 for user in config["users"]}
+criteria = config["criteria"]
+users = {
+    user:{
+        crit:0 for crit in criteria
+    } for user in config["users"]
+}
 vote_links = {user: randint(1, 1000) for user in users}
 
 
 @route("/")
 def main():
-    return template("home", vote_links=vote_links, users=users)
+    return template("home", vote_links=vote_links, users=users, criteria=criteria)
 
 
 @route("/vote/<vote_link:int>")
@@ -33,6 +38,7 @@ def vote(vote_link):
         msg="",
         points=points,
         base_dir=base_dir,
+        criteria=criteria,
     )
 
 
@@ -46,47 +52,51 @@ def submit_vote():
     if this_user is None:
         return "Already voted"
 
-    sum = 0
-    for user in users:
-        if user == this_user:
-            continue
-        try:
-            int(request.forms.get(user))
-        except ValueError:
+    for crit in criteria:
+        sum = 0
+        for user in users:
+            if user == this_user:
+                continue
+            try:
+                int(request.forms.get(f"{user}-{crit}"))
+            except ValueError:
+                return template(
+                    "vote",
+                    users={u: users[u] for u in users if u != this_user},
+                    vote_link=vote_link,
+                    msg="All values must be integers",
+                    points=points,
+                    base_dir=base_dir,
+                    criteria=criteria,
+                )
+            if int(request.forms.get(f"{user}-{crit}")) < 0:
+                return template(
+                    "vote",
+                    users={u: users[u] for u in users if u != this_user},
+                    vote_link=vote_link,
+                    msg="All points must be positive",
+                    points=points,
+                    base_dir=base_dir,
+                    criteria=criteria,
+                )
+            sum += int(request.forms.get(f"{user}-{crit}"))
+        if sum != points:
             return template(
                 "vote",
                 users={u: users[u] for u in users if u != this_user},
                 vote_link=vote_link,
-                msg="All values must be integers",
+                msg=f"Points must add up to {points}, vote again please",
                 points=points,
                 base_dir=base_dir,
+                criteria=criteria,
             )
-        if int(request.forms.get(user)) < 0:
-            return template(
-                "vote",
-                users={u: users[u] for u in users if u != this_user},
-                vote_link=vote_link,
-                msg="All points must be positive",
-                points=points,
-                base_dir=base_dir,
-            )
-        sum += int(request.forms.get(user))
-    if sum != points:
-        return template(
-            "vote",
-            users={u: users[u] for u in users if u != this_user},
-            vote_link=vote_link,
-            msg=f"Points must add up to {points}, vote again please",
-            points=points,
-            base_dir=base_dir,
-        )
+        for user in users:
+            if user == this_user:
+                continue
+            users[user][crit] += int(request.forms.get(f"{user}-{crit}"))
 
     vote_links.pop(this_user)
-    for user in users:
-        if user == this_user:
-            continue
-        users[user] += int(request.forms.get(user))
     redirect(base_dir or "/", 302)
 
 
-run(host="localhost", port=8069)
+run(host="localhost", port=8069, reloader=True)

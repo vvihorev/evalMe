@@ -4,6 +4,11 @@
         "Bob",
         "Carl"
     ],
+    "criteria": [
+        "first", 
+        "second",
+        "third"
+    ],
     "points": 20,
     "base_dir": ""
 }
