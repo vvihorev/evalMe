@@ -1,14 +1,8 @@
 {
     "users": [
-        "Andre",
-        "Ambre",
-        "Faridun",
-        "Predrag",
-        "Rishabh",
-        "Satvik",
-        "Savo",
-        "Tim", 
-        "Valentin"
+        "Alice",
+        "Bob",
+        "Carl",
     ],
-    "points": 80
+    "points": 20
 }
