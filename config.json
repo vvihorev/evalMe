@@ -4,5 +4,6 @@
         "Bob",
         "Carl"
     ],
-    "points": 20
+    "points": 20,
+    "base_dir": ""
 }

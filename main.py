@@ -7,6 +7,7 @@ from bottle import route, template, run, request, redirect
 with open("config.json") as f:
     config = json.load(f)
 
+base_dir = config["base_dir"]
 points = config["points"]
 users = {user: 0 for user in config["users"]}
 vote_links = {user: randint(1, 1000) for user in users}
@@ -31,6 +32,7 @@ def vote(vote_link):
         vote_link=vote_link,
         msg="",
         points=points,
+        base_dir=base_dir,
     )
 
 
@@ -57,6 +59,7 @@ def submit_vote():
                 vote_link=vote_link,
                 msg="All values must be integers",
                 points=points,
+                base_dir=base_dir,
             )
         if int(request.forms.get(user)) < 0:
             return template(
@@ -65,6 +68,7 @@ def submit_vote():
                 vote_link=vote_link,
                 msg="All points must be positive",
                 points=points,
+                base_dir=base_dir,
             )
         sum += int(request.forms.get(user))
     if sum != points:
@@ -74,6 +78,7 @@ def submit_vote():
             vote_link=vote_link,
             msg=f"Points must add up to {points}, vote again please",
             points=points,
+            base_dir=base_dir,
         )
 
     vote_links.pop(this_user)
@@ -81,7 +86,7 @@ def submit_vote():
         if user == this_user:
             continue
         users[user] += int(request.forms.get(user))
-    redirect("/", 302)
+    redirect(base_dir or "/", 302)
 
 
 run(host="localhost", port=8069)
