@@ -16,11 +16,11 @@ users = {
     } for user in config["users"]
 }
 vote_links = {user: randint(1, 1000) for user in users}
-
+comments = []
 
 @route("/")
 def main():
-    return template("home", vote_links=vote_links, users=users, criteria=criteria)
+    return template("home", vote_links=vote_links, users=users, criteria=criteria, comments=comments)
 
 
 @route("/vote/<vote_link:int>")
@@ -95,6 +95,8 @@ def submit_vote():
                 continue
             users[user][crit] += int(request.forms.get(f"{user}-{crit}"))
 
+    if request.forms.get("comment"):
+        comments.append(request.forms.get("comment"))
     vote_links.pop(this_user)
     redirect(base_dir or "/", 302)
 
