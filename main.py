@@ -90,6 +90,8 @@ def submit_vote():
                 base_dir=base_dir,
                 criteria=criteria,
             )
+
+    for crit in criteria:
         for user in users:
             if user == this_user:
                 continue
