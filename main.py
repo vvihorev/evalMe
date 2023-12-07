@@ -4,6 +4,10 @@ from random import randint
 from bottle import route, template, run, request, redirect
 
 
+random_nums = set()
+while len(random_nums) < 10:
+    random_nums.add(randint(1, 1000))
+
 with open("config.json") as f:
     config = json.load(f)
 
@@ -15,8 +19,9 @@ users = {
         crit:0 for crit in criteria
     } for user in config["users"]
 }
-vote_links = {user: randint(1, 1000) for user in users}
+vote_links = {user: link_num for user,link_num in zip(users.keys(), random_nums)}
 comments = []
+
 
 @route("/")
 def main():
